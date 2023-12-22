@@ -1,6 +1,8 @@
 package middle
 
 import (
+	"github.com/xxl6097/go-glog/glog"
+	"go-http/server/token"
 	"go-http/server/util"
 	"net/http"
 	"strings"
@@ -24,7 +26,18 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			util.Respond(w, util.TokenEmpty)
 			return
 		}
-		next.ServeHTTP(w, r)
+		//next.ServeHTTP(w, r)
+		token.TokenUtils.CheckToken(tk, func(ok bool, parms map[string]interface{}) {
+			if ok {
+				for k, v := range parms {
+					r.Header.Set(k, v.(string))
+				}
+				next.ServeHTTP(w, r)
+			} else {
+				glog.Info(auths, http.StatusUnauthorized)
+				w.WriteHeader(http.StatusUnauthorized)
+			}
+		})
 		//isValidata, username, res := utils.TokenUtils.CheckToken(tk)
 		//if isValidata {
 		//	r.Header.Set("UserName", username)

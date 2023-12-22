@@ -13,6 +13,7 @@ var RouterUtil = routerUtil{}
 // 免登录验证
 var NotLoginUri = []string{}
 var NotLoginUriByPrefix = []string{"logview"}
+var Apis = []string{}
 
 type ApiModel struct {
 	Fun            func(http.ResponseWriter, *http.Request)
@@ -36,7 +37,8 @@ func (this *routerUtil) AddHandleFunc(router *mux.Router, models ...ApiModel) {
 		if model.NoAuthByPrefix {
 			NotLoginUriByPrefix = append(NotLoginUriByPrefix, auths)
 		}
-		glog.Warn(apipth)
+		//glog.Warn(apipth)
+		Apis = append(Apis, apipth)
 		router.HandleFunc(apipth, model.Fun).Methods(model.Method, http.MethodOptions)
 	}
 }

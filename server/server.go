@@ -51,6 +51,10 @@ func (this *Server) Start(address string) {
 	}
 
 	ip := logutil.GetHostIp()
+
+	for _, api := range util.Apis {
+		glog.Errorf("http://%s%s%s\n", ip, server.Addr, api)
+	}
 	glog.Errorf("api host http://%s%s\n", ip, server.Addr)
 	glog.Errorf("log addr http://%s%s/logview/\n", ip, server.Addr)
 	//this.router.Use(mux.CORSMethodMiddleware(this.router))
