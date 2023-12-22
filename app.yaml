@@ -1,0 +1,21 @@
+server:
+    port: 8080
+    host: localhost
+database:
+    host: db.example.com
+    port: 5432
+    username: user
+    password: secret
+
+http:
+  server:
+    port: 8080
+    host: uuxia.cn
+    #接口地址前缀
+    apipath: /v1/api
+
+log:
+    #log的web访问端口
+    port: 8081
+    username: admin
+    password: admin
