@@ -38,7 +38,7 @@ func (this *apiSingleton) init() {
 }
 
 func (this *apiSingleton) Setup(router *mux.Router) {
-	this.init()
+	//this.init()
 	for _, route := range this.business {
 		route.Setup(router)
 	}

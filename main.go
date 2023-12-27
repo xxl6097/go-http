@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/xxl6097/go-glog/glog"
+	"github.com/xxl6097/go-http/api"
+	"github.com/xxl6097/go-http/api/test"
 	"github.com/xxl6097/go-http/server"
 	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/util"
@@ -34,6 +36,7 @@ func init() {
 
 func bootstrap() {
 	glog.Errorf("config--->%+v", conf)
+	api.GetApi().Add(test.NewRoute(test.NewController()))
 	server.NewServer().Start(fmt.Sprintf(":%d", conf.HttpConfig.Server.Port))
 }
 
