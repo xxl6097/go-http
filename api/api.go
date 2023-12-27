@@ -27,14 +27,14 @@ func GetApi() *apiSingleton {
 	return instance
 }
 
-func (this *apiSingleton) add(routes ...inter.IRoute) {
+func (this *apiSingleton) Add(routes ...inter.IRoute) {
 	for _, route := range routes {
 		this.business = append(this.business, route)
 	}
 }
 
 func (this *apiSingleton) init() {
-	this.add(test.NewRoute(test.NewController()))
+	this.Add(test.NewRoute(test.NewController()))
 }
 
 func (this *apiSingleton) Setup(router *mux.Router) {
