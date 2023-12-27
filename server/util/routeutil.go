@@ -3,7 +3,7 @@ package util
 import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/go-glog/glog"
-	"go-http/server/config"
+	"github.com/xxl6097/go-http/server/config"
 	"net/http"
 	"strings"
 )
@@ -29,7 +29,7 @@ type routerUtil struct {
 
 func (this *routerUtil) AddHandleFunc(router *mux.Router, models ...ApiModel) {
 	for _, model := range models {
-		apipth := config.GetYaml().HttpConfig.Server.ApiPath + model.Path
+		apipth := config.Get().GetConfig().HttpConfig.Server.ApiPath + model.Path
 		auths := strings.ReplaceAll(strings.Replace(apipth, "/", "", 1), "/", ":")
 		if model.NoAuth {
 			NotLoginUri = append(NotLoginUri, auths)
@@ -46,7 +46,7 @@ func (this *routerUtil) AddHandleFunc(router *mux.Router, models ...ApiModel) {
 func (this *routerUtil) AddFileServer(router *mux.Router, models ...ApiModel) {
 	//this.router.PathPrefix("/v1/api/files/").Handler(http.StripPrefix("/v1/api/files/", http.FileServer(http.Dir("./files"))))
 	for _, model := range models {
-		apipth := config.GetYaml().HttpConfig.Server.ApiPath + model.Path
+		apipth := config.Get().GetConfig().HttpConfig.Server.ApiPath + model.Path
 		auths := strings.ReplaceAll(strings.Replace(apipth, "/", "", 1), "/", ":")
 		if model.NoAuth {
 			NotLoginUri = append(NotLoginUri, auths)

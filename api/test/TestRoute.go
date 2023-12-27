@@ -2,8 +2,8 @@ package test
 
 import (
 	"github.com/gorilla/mux"
-	"go-http/server/inter"
-	"go-http/server/util"
+	"github.com/xxl6097/go-http/server/inter"
+	"github.com/xxl6097/go-http/server/util"
 	"net/http"
 )
 

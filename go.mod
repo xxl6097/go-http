@@ -1,4 +1,4 @@
-module go-http
+module github.com/xxl6097/go-http
 
 go 1.19
 

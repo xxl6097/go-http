@@ -7,19 +7,6 @@ import (
 	"os"
 )
 
-type Yml struct {
-	Database   DatabaseConfig `yaml:"database"`
-	HttpConfig HttpConfig     `yaml:"http"`
-	LogConfig  LogConfig      `yaml:"log"`
-}
-
-type DatabaseConfig struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-}
-
 type HttpServerConfig struct {
 	Port    int    `yaml:"port"`
 	Host    string `yaml:"host"`
@@ -29,15 +16,9 @@ type HttpServerConfig struct {
 type HttpConfig struct {
 	Server HttpServerConfig `yaml:"server"`
 }
-type LogConfig struct {
-	Port     int    `yaml:"port"`
-	UserName string `yaml:"username"`
-	PassWord string `yaml:"password"`
-}
-
-var yml Yml
 
 func init() {
+	//instance = conf
 	var path = flag.String("c", "", "yaml文件路径")
 	flag.Parse()
 	var file *os.File
@@ -55,12 +36,33 @@ func init() {
 	// 创建解析器
 	decoder := yaml.NewDecoder(file)
 	// 解析 YAML 数据
-	err = decoder.Decode(&yml)
+	if instance == nil {
+		instance = &Config{}
+	}
+	err = decoder.Decode(Get())
 	if err != nil {
 		panic(fmt.Sprintf("Error decoding YAML:%v", err))
 	}
 }
 
-func GetYaml() Yml {
-	return yml
+type IConfig interface {
+	GetConfig() Config
+}
+
+type Config struct {
+	HttpConfig HttpConfig `yaml:"http"`
+}
+
+var instance IConfig
+
+func Get() IConfig {
+	return instance
+}
+
+func Set(conf IConfig) {
+	instance = conf
+}
+
+func (this *Config) GetConfig() Config {
+	return *this
 }

@@ -3,11 +3,11 @@ package server
 import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/go-glog/glog"
+	"github.com/xxl6097/go-http/api"
+	"github.com/xxl6097/go-http/server/middle"
+	"github.com/xxl6097/go-http/server/util"
 	"github.com/xxl6097/gologview/go/glogweb"
 	logutil "github.com/xxl6097/gologview/go/util"
-	"go-http/api"
-	middle2 "go-http/server/middle"
-	"go-http/server/util"
 	"net"
 	"net/http"
 	"time"
@@ -33,7 +33,7 @@ func NewServer() *Server {
 func (this *Server) initApi() {
 	glogweb.GetLogApi().HandlerLogView(this.router.NewRoute().Subrouter(), "admin", "het002402")
 	//顺序，后面最先调用
-	this.router.Use(middle2.EnableCors, middle2.HandleOptions, middle2.AuthMiddleware)
+	this.router.Use(middle.EnableCors, middle.HandleOptions, middle.AuthMiddleware)
 	this.router.Use(mux.CORSMethodMiddleware(this.router))
 	api.GetApi().Setup(this.router)
 }

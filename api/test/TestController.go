@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/xxl6097/go-glog/glog"
-	"go-http/server/util"
+	"github.com/xxl6097/go-http/server/util"
 	"net/http"
 	"strings"
 )

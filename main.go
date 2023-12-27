@@ -3,21 +3,24 @@ package main
 import (
 	"fmt"
 	"github.com/xxl6097/go-glog/glog"
-	"go-http/server"
-	"go-http/server/config"
+	"github.com/xxl6097/go-http/server"
+	"github.com/xxl6097/go-http/server/config"
 )
 
-var conf config.Yml
+type ConfigEx struct {
+	config.Config
+	Version string `yaml:"version"`
+}
 
 func init() {
-	conf = config.GetYaml()
+	//config.Init(&ConfigEx{})
 	glog.SetLogFile("./log", "app.log")
 	glog.SetCons(true)
 }
 
 func bootstrap() {
-	glog.Errorf("config--->%+v", conf)
-	server.NewServer().Start(fmt.Sprintf(":%d", conf.HttpConfig.Server.Port))
+	glog.Errorf("config--->%+v", config.Get().GetConfig())
+	server.NewServer().Start(fmt.Sprintf(":%d", config.Get().GetConfig().HttpConfig.Server.Port))
 }
 
 func main() {
