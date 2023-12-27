@@ -1,4 +1,4 @@
-package config
+package util
 
 import (
 	"flag"
@@ -30,9 +30,3 @@ func ParseYaml(conf interface{}) {
 		panic(fmt.Sprintf("Error decoding YAML:%v", err))
 	}
 }
-
-//func init() {
-//	conf := &Config{}
-//	ParseYaml(conf)
-//	fmt.Println(conf)
-//}
