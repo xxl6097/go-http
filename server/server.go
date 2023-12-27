@@ -5,7 +5,7 @@ import (
 	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/go-http/api"
 	"github.com/xxl6097/go-http/server/middle"
-	"github.com/xxl6097/go-http/server/util"
+	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/gologview/go/glogweb"
 	logutil "github.com/xxl6097/gologview/go/util"
 	"net"
@@ -52,14 +52,14 @@ func (this *Server) Start(address string) {
 
 	ip := logutil.GetHostIp()
 
-	for _, api := range util.Apis {
+	for _, api := range route.Apis {
 		glog.Errorf("http://%s%s%s\n", ip, server.Addr, api)
 	}
 	glog.Errorf("api host http://%s%s\n", ip, server.Addr)
 	glog.Errorf("log addr http://%s%s/logview/\n", ip, server.Addr)
 	//this.router.Use(mux.CORSMethodMiddleware(this.router))
 
-	glog.Debug(util.NotLoginUri)
-	glog.Debug(util.NotLoginUriByPrefix)
+	glog.Debug(route.NotLoginUri)
+	glog.Debug(route.NotLoginUriByPrefix)
 	_ = server.Serve(ln)
 }

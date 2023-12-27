@@ -7,18 +7,7 @@ import (
 	"os"
 )
 
-type HttpServerConfig struct {
-	Port    int    `yaml:"port"`
-	Host    string `yaml:"host"`
-	ApiPath string `yaml:"apipath"`
-}
-
-type HttpConfig struct {
-	Server HttpServerConfig `yaml:"server"`
-}
-
-func init() {
-	//instance = conf
+func ParseYaml(conf interface{}) {
 	var path = flag.String("c", "", "yaml文件路径")
 	flag.Parse()
 	var file *os.File
@@ -36,33 +25,14 @@ func init() {
 	// 创建解析器
 	decoder := yaml.NewDecoder(file)
 	// 解析 YAML 数据
-	if instance == nil {
-		instance = &Config{}
-	}
-	err = decoder.Decode(Get())
+	err = decoder.Decode(conf)
 	if err != nil {
 		panic(fmt.Sprintf("Error decoding YAML:%v", err))
 	}
 }
 
-type IConfig interface {
-	GetConfig() Config
-}
-
-type Config struct {
-	HttpConfig HttpConfig `yaml:"http"`
-}
-
-var instance IConfig
-
-func Get() IConfig {
-	return instance
-}
-
-func Set(conf IConfig) {
-	instance = conf
-}
-
-func (this *Config) GetConfig() Config {
-	return *this
-}
+//func init() {
+//	conf := &Config{}
+//	ParseYaml(conf)
+//	fmt.Println(conf)
+//}

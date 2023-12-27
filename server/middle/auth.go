@@ -2,6 +2,7 @@ package middle
 
 import (
 	"github.com/xxl6097/go-glog/glog"
+	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/token"
 	"github.com/xxl6097/go-http/server/util"
 	"net/http"
@@ -12,11 +13,11 @@ import (
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		auths := strings.ReplaceAll(strings.Replace(r.URL.Path, "/", "", 1), "/", ":")
-		if util.Contains(util.NotLoginUri, auths) {
+		if util.Contains(route.NotLoginUri, auths) {
 			next.ServeHTTP(w, r)
 			return
 		}
-		if util.StartWithByArr(auths, util.NotLoginUriByPrefix) {
+		if util.StartWithByArr(auths, route.NotLoginUriByPrefix) {
 			next.ServeHTTP(w, r)
 			return
 		}

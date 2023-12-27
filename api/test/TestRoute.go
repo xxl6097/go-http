@@ -3,7 +3,7 @@ package test
 import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/go-http/server/inter"
-	"github.com/xxl6097/go-http/server/util"
+	"github.com/xxl6097/go-http/server/route"
 	"net/http"
 )
 
@@ -26,19 +26,19 @@ func NewRoute(ctl *TestController) inter.IRoute {
 //}
 
 func (this *CardRoute) Setup(router *mux.Router) {
-	util.RouterUtil.AddHandleFunc(router, util.ApiModel{
+	route.RouterUtil.AddHandleFunc(router, route.ApiModel{
 		Method: http.MethodPost,
 		Path:   "/mqtt/auth",
 		Fun:    this.controller.Auth,
 		NoAuth: true,
 	})
-	util.RouterUtil.AddHandleFunc(router, util.ApiModel{
+	route.RouterUtil.AddHandleFunc(router, route.ApiModel{
 		Method: http.MethodPost,
 		Path:   "/mqtt/post",
 		Fun:    this.controller.Post,
 		NoAuth: true,
 	})
-	util.RouterUtil.AddHandleFunc(router, util.ApiModel{
+	route.RouterUtil.AddHandleFunc(router, route.ApiModel{
 		Method: http.MethodGet,
 		Path:   "/mqtt/test",
 		Fun:    this.controller.Test,
