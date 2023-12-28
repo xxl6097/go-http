@@ -30,8 +30,16 @@ func NewServer() *Server {
 	return this
 }
 
+func NewServerWithLogView(user, pass string) *Server {
+	this := &Server{
+		router: mux.NewRouter(),
+	}
+	glogweb.GetLogApi().HandlerLogView(this.router.NewRoute().Subrouter(), user, pass)
+	this.initApi()
+	return this
+}
+
 func (this *Server) initApi() {
-	glogweb.GetLogApi().HandlerLogView(this.router.NewRoute().Subrouter(), "admin", "het002402")
 	//顺序，后面最先调用
 	this.router.Use(middle.EnableCors, middle.HandleOptions, middle.AuthMiddleware)
 	this.router.Use(mux.CORSMethodMiddleware(this.router))
