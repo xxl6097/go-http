@@ -29,7 +29,6 @@ func NewServer() *Server {
 	this.initApi()
 	return this
 }
-
 func NewServerWithLogView(user, pass string) *Server {
 	this := &Server{
 		router: mux.NewRouter(),
