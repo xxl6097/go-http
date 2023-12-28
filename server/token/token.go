@@ -2,9 +2,11 @@ package token
 
 var TokenUtils = tokenUtil{}
 
-type TokenHandler interface {
-	CheckToken(token string) (bool, map[string]interface{})
-}
+type TokenHandler func(string) (bool, map[string]interface{})
+
+//type TokenHandler interface {
+//	CheckToken(token string) (bool, map[string]interface{})
+//}
 
 type TokenModel struct {
 	AccessToken    string `json:"accessToken"`
@@ -26,7 +28,7 @@ func (this *tokenUtil) SetTokenCallBack(callback TokenHandler) {
 
 func (this *tokenUtil) CheckToken(token string, f func(bool, map[string]interface{})) {
 	if this.callback != nil {
-		ok, maps := this.callback.CheckToken(token)
+		ok, maps := this.callback(token)
 		if f != nil {
 			f(ok, maps)
 		}
