@@ -36,7 +36,8 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				next.ServeHTTP(w, r)
 			} else {
 				glog.Info(auths, http.StatusUnauthorized)
-				w.WriteHeader(http.StatusUnauthorized)
+				//w.WriteHeader(http.StatusUnauthorized)
+				util.Respond(w, util.TokenInvalid)
 			}
 		})
 		//isValidata, username, res := utils.TokenUtils.CheckToken(tk)
