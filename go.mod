@@ -9,7 +9,11 @@ require (
 
 require (
 	github.com/gorilla/websocket v1.5.1 // indirect
-	github.com/xxl6097/gologview v1.0.3 // indirect
+	github.com/xxl6097/gologview v1.0.5 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+//replace (
+//    github.com/xxl6097/gologview v1.0.3 => ../../gologview
+//)

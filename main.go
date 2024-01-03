@@ -37,7 +37,7 @@ func init() {
 func bootstrap() {
 	glog.Errorf("config--->%+v", conf)
 	api.GetApi().Add(test.NewRoute(test.NewController()))
-	server.NewServer().Start(fmt.Sprintf(":%d", conf.HttpConfig.Server.Port))
+	server.NewServerWithLogView("admin", "admin").Start(fmt.Sprintf(":%d", conf.HttpConfig.Server.Port))
 }
 
 func main() {

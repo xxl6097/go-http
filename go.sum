@@ -22,6 +22,10 @@ github.com/xxl6097/gologview v1.0.2 h1:XKl19y4/37tECTNCnTOMBACizfJLZsNCNqW9tZCLD
 github.com/xxl6097/gologview v1.0.2/go.mod h1:EurzKmQDJxaMKWA3ZNuKAfWx93rXef/JQd5obBktLso=
 github.com/xxl6097/gologview v1.0.3 h1:0EONXHo+51EwUrH+s+GvlKMpiELv7HBOfxsK0HQW2n0=
 github.com/xxl6097/gologview v1.0.3/go.mod h1:EurzKmQDJxaMKWA3ZNuKAfWx93rXef/JQd5obBktLso=
+github.com/xxl6097/gologview v1.0.4 h1:7aypQk6FDi6B4O7XJajDU7K+BPw+yDqdvBbyUC+YSdY=
+github.com/xxl6097/gologview v1.0.4/go.mod h1:EurzKmQDJxaMKWA3ZNuKAfWx93rXef/JQd5obBktLso=
+github.com/xxl6097/gologview v1.0.5 h1:mczUC8cMGqgglszzSqYgrfgRLHrFn5INqG39DQFR8mM=
+github.com/xxl6097/gologview v1.0.5/go.mod h1:EurzKmQDJxaMKWA3ZNuKAfWx93rXef/JQd5obBktLso=
 golang.org/x/net v0.19.0 h1:zTwKpTd2XuCqf8huc7Fo2iSy+4RHPd10s4KzeTnVr1c=
 golang.org/x/net v0.19.0/go.mod h1:CfAk/cbD4CthTvqiEl8NpboMuiuOYsAr/7NOjZJtv1U=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

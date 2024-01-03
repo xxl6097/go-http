@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/xxl6097/go-glog/glog"
 	"net/http"
 	"strings"
 )
@@ -11,8 +10,9 @@ var RouterUtil = routerUtil{}
 
 // 免登录验证
 var NotLoginUri = []string{}
-var NotLoginUriByPrefix = []string{"logview"}
+var NotLoginUriByPrefix = []string{"logview", "fserver"}
 var Apis = []string{}
+var FServers = []string{}
 
 type ApiModel struct {
 	Fun            func(http.ResponseWriter, *http.Request)
@@ -58,7 +58,20 @@ func (this *routerUtil) AddFileServer(router *mux.Router, models ...ApiModel) {
 		if model.NoAuthByPrefix {
 			NotLoginUriByPrefix = append(NotLoginUriByPrefix, auths)
 		}
-		glog.Warn(apipth)
+		//glog.Warn(apipth)
+		FServers = append(FServers, apipth)
 		router.PathPrefix(apipth).Handler(http.StripPrefix(apipth, http.FileServer(http.Dir("./files"))))
+	}
+}
+
+func (this *routerUtil) AddNoAuth(url string) {
+	if url != "" {
+		NotLoginUri = append(NotLoginUri, url)
+	}
+}
+
+func (this *routerUtil) AddNoAuthPrefix(prefix string) {
+	if prefix != "" {
+		NotLoginUriByPrefix = append(NotLoginUriByPrefix, prefix)
 	}
 }
