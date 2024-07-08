@@ -2,7 +2,7 @@ package token
 
 var TokenUtils = tokenUtil{}
 
-type TokenHandler func(string) (bool, map[string]interface{})
+type Handler func(string) (bool, map[string]interface{})
 
 //type TokenHandler interface {
 //	CheckToken(token string) (bool, map[string]interface{})
@@ -19,10 +19,10 @@ type TokenModel struct {
 
 // tokenUtil token操作工具类
 type tokenUtil struct {
-	callback TokenHandler
+	callback Handler
 }
 
-func (this *tokenUtil) SetTokenCallBack(callback TokenHandler) {
+func (this *tokenUtil) Callback(callback Handler) {
 	this.callback = callback
 }
 

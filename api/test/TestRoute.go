@@ -42,6 +42,6 @@ func (this *CardRoute) Setup(router *mux.Router) {
 		Method: http.MethodGet,
 		Path:   "/mqtt/test",
 		Fun:    this.controller.Test,
-		NoAuth: true,
+		NoAuth: false,
 	})
 }
