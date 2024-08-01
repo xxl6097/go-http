@@ -2,6 +2,7 @@ package static
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/go-http/server/inter"
 	"github.com/xxl6097/go-http/server/route"
 	"net/http"
@@ -22,6 +23,7 @@ func (this *static) Setup(_router *mux.Router) {
 	//route.RouterUtil.AddNoAuthPrefix("/files")
 	//route.RouterUtil.AddNoAuthPrefix("/files/")
 	// 创建一个静态文件服务器，处理 "/static/" 路径
+	glog.Println("baseDir:", baseDir)
 	fileServer := http.FileServer(http.Dir(baseDir))
 	handle := http.StripPrefix(static_prefix, fileServer)
 	router.PathPrefix(static_prefix).Handler(handle)
