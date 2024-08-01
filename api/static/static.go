@@ -5,6 +5,7 @@ import (
 	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/go-http/server/inter"
 	"github.com/xxl6097/go-http/server/route"
+	"github.com/xxl6097/go-http/server/util"
 	"net/http"
 	"os"
 )
@@ -14,10 +15,14 @@ var (
 )
 
 type static struct {
+	username, password string
 }
 
 func (this *static) Setup(_router *mux.Router) {
 	router := _router.NewRoute().Subrouter()
+	if this.username != "" && this.password != "" {
+		router.Use(util.NewHTTPAuthMiddleware(this.username, this.password).Middleware)
+	}
 	baseDir, _ := os.Getwd()
 	route.RouterUtil.AddNoAuthPrefix("files")
 	//route.RouterUtil.AddNoAuthPrefix("/files")
@@ -29,7 +34,10 @@ func (this *static) Setup(_router *mux.Router) {
 	router.PathPrefix(static_prefix).Handler(handle)
 }
 
-func NewRoute() inter.IRoute {
-	opt := &static{}
+func NewRoute(username, password string) inter.IRoute {
+	opt := &static{
+		username: username,
+		password: password,
+	}
 	return opt
 }
