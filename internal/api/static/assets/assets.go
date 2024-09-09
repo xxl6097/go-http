@@ -16,7 +16,7 @@ package assets
 
 import (
 	"fmt"
-	"github.com/xxl6097/go-http/api/static/assets/html"
+	"github.com/xxl6097/go-http/internal/api/static/assets/html"
 	"io/fs"
 	"net/http"
 )

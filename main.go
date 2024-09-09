@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/xxl6097/go-glog/glog"
-	"github.com/xxl6097/go-http/api"
-	"github.com/xxl6097/go-http/api/test"
+	"github.com/xxl6097/go-http/internal/api"
+	test2 "github.com/xxl6097/go-http/internal/api/test"
 	"github.com/xxl6097/go-http/server"
 	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/token"
@@ -20,7 +20,7 @@ func bootstrap() {
 		glog.Println("Callback", s)
 		return true, nil
 	})
-	api.GetApi().Add(test.NewRoute(test.NewController()))
+	api.GetApi().Add(test2.NewRoute(test2.NewController()))
 	server.NewServer().Start(":8888")
 }
 

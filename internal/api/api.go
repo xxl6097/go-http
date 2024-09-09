@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/xxl6097/go-http/api/test"
+	test2 "github.com/xxl6097/go-http/internal/api/test"
 	"github.com/xxl6097/go-http/server/inter"
 	"sync"
 )
@@ -34,7 +34,7 @@ func (this *apiSingleton) Add(routes ...inter.IRoute) {
 }
 
 func (this *apiSingleton) init() {
-	this.Add(test.NewRoute(test.NewController()))
+	this.Add(test2.NewRoute(test2.NewController()))
 }
 
 func (this *apiSingleton) Setup(router *mux.Router) {
