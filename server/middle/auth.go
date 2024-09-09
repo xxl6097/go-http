@@ -28,11 +28,11 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		tk := r.Header.Get("accessToken")
-		if tk == "" {
-			//glog.Info("AuthMiddleware----2", tk)
-			util.Respond(w, util.TokenEmpty)
-			return
-		}
+		//if tk == "" {
+		//	//glog.Info("AuthMiddleware----2", tk)
+		//	util.Respond(w, util.TokenEmpty)
+		//	return
+		//}
 		//next.ServeHTTP(w, r)
 		token.TokenUtils.CheckToken(tk, func(ok bool, parms map[string]interface{}) {
 			if ok {
