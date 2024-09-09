@@ -17,8 +17,8 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		next.ServeHTTP(w, r)
-		return
+		//next.ServeHTTP(w, r)
+		//return
 		if r.URL.Path == "/" {
 			next.ServeHTTP(w, r)
 			return
