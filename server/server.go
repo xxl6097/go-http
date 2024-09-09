@@ -3,8 +3,8 @@ package server
 import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/go-glog/glog"
-	"github.com/xxl6097/go-http/internal/api"
-	"github.com/xxl6097/go-http/internal/api/static/assets"
+	"github.com/xxl6097/go-http/cmd/app/static/assets"
+	"github.com/xxl6097/go-http/pkg/api"
 	"github.com/xxl6097/go-http/server/middle"
 	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/util"

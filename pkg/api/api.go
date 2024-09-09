@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	test2 "github.com/xxl6097/go-http/internal/api/test"
+	test2 "github.com/xxl6097/go-http/cmd/app/test"
 	"github.com/xxl6097/go-http/server/inter"
 	"sync"
 )

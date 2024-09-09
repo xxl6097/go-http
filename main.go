@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/xxl6097/go-glog/glog"
-	"github.com/xxl6097/go-http/internal/api"
-	test2 "github.com/xxl6097/go-http/internal/api/test"
+	test2 "github.com/xxl6097/go-http/cmd/app/test"
+	"github.com/xxl6097/go-http/pkg/api"
 	"github.com/xxl6097/go-http/server"
 	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/token"
