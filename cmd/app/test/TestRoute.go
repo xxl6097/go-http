@@ -44,4 +44,10 @@ func (this *CardRoute) Setup(router *mux.Router) {
 		Fun:    this.controller.Test,
 		NoAuth: false,
 	})
+	route.RouterUtil.AddHandleFunc(router, route.ApiModel{
+		Method: http.MethodGet,
+		Path:   "/prod-api/vue-admin-template/user/info",
+		Fun:    this.controller.Test,
+		NoAuth: false,
+	})
 }

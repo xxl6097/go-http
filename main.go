@@ -8,11 +8,11 @@ import (
 	"github.com/xxl6097/go-http/server/token"
 )
 
-func init() {
-	//route.RouterUtil.SetApiPath("/v1/api")
-	glog.SetLogFile("./log", "app.log")
-	glog.SetCons(true)
-}
+//func init() {
+//	//route.RouterUtil.SetApiPath("/v1/api")
+//	glog.SetLogFile("./log", "app.log")
+//	glog.SetCons(true)
+//}
 
 func bootstrap() {
 	token.TokenUtils.Callback(func(s string) (bool, map[string]interface{}) {
