@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/go-http/pkg/api"
+	"github.com/xxl6097/go-http/server/middle"
 	"github.com/xxl6097/go-http/server/route"
 	"net"
 	"net/http"
@@ -29,8 +30,8 @@ func NewServer() *Server {
 
 func (this *Server) initApi() {
 	//顺序，后面最先调用
-	//this.router.Use(middle.EnableCors, middle.HandleOptions, middle.AuthMiddleware)
-	this.router.Use(mux.CORSMethodMiddleware(this.router))
+	this.router.Use(middle.EnableCors, middle.HandleOptions, middle.AuthMiddleware)
+	//this.router.Use(mux.CORSMethodMiddleware(this.router))
 	api.GetApi().Setup(this.router)
 }
 

@@ -5,12 +5,11 @@ import (
 	test2 "github.com/xxl6097/go-http/cmd/app/test"
 	"github.com/xxl6097/go-http/pkg/api"
 	"github.com/xxl6097/go-http/server"
-	"github.com/xxl6097/go-http/server/route"
 	"github.com/xxl6097/go-http/server/token"
 )
 
 func init() {
-	route.RouterUtil.SetApiPath("/v1/api")
+	//route.RouterUtil.SetApiPath("/v1/api")
 	glog.SetLogFile("./log", "app.log")
 	glog.SetCons(true)
 }
