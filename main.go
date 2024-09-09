@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/go-http/api"
-	"github.com/xxl6097/go-http/api/static"
 	"github.com/xxl6097/go-http/api/test"
 	"github.com/xxl6097/go-http/server"
 	"github.com/xxl6097/go-http/server/route"
@@ -22,7 +21,6 @@ func bootstrap() {
 		return true, nil
 	})
 	api.GetApi().Add(test.NewRoute(test.NewController()))
-	api.GetApi().Add(static.NewRoute())
 	server.NewServer().Start(":8888")
 }
 
