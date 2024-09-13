@@ -35,8 +35,9 @@ func (this *Server) initApi() {
 	api.GetApi().Setup(this.router)
 }
 
-func (this *Server) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) {
+func (this *Server) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) *Server {
 	this.router.HandleFunc(pattern, handler)
+	return this
 }
 func (this *Server) Start(address string) {
 	server := &http.Server{
