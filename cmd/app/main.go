@@ -37,10 +37,12 @@ func bootstrap() {
 		glog.Println("Callback", s)
 		return true, nil
 	})
+
+	//authMiddle := middle.NewHTTPAuthMiddleware("admin", "het002402").SetAuthFailDelay(200 * time.Millisecond).Middleware
 	httpserver.New().
-		Use(middle.NewHTTPAuthMiddleware("admin", "het002402").Middleware).
 		AddRoute(test.NewRoute(test.NewController())).
 		AddRoute(test.NewWsRoute()).
+		//Use(authMiddle).
 		//RouterFunc(initSse).
 		Done(8080)
 }
