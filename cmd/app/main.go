@@ -38,6 +38,7 @@ func bootstrap() {
 		return true, nil
 	})
 	httpserver.New().
+		Use(middle.NewHTTPAuthMiddleware("admin", "het002402").Middleware).
 		AddRoute(test.NewRoute(test.NewController())).
 		AddRoute(test.NewWsRoute()).
 		//RouterFunc(initSse).
