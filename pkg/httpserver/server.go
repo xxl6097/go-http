@@ -35,7 +35,7 @@ func (this *httpserver) AddRoute(routes ...ihttpserver.IRoute) *httpserver {
 	return this
 }
 
-func (this *httpserver) Auth(username, password string) *httpserver {
+func (this *httpserver) BasicAuth(username, password string) *httpserver {
 	this.server.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
 	return this
 }
