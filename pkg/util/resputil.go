@@ -3,7 +3,9 @@ package util
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/xxl6097/go-glog/glog"
+	"fmt"
+	"github.com/xxl6097/glog/glog"
+	"net"
 	"net/http"
 	"reflect"
 	"sort"
@@ -68,21 +70,21 @@ func GetRequestParam(r *http.Request, key string) string {
 	return vals[0]
 }
 
-func GetReqData[T any](w http.ResponseWriter, r *http.Request) *T {
+func GetReqData[T any](w http.ResponseWriter, r *http.Request) (*T, error) {
 	var t T
 	err := json.NewDecoder(r.Body).Decode(&t)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		//http.Error(w, err.Error(), http.StatusBadRequest)
 		glog.Error("DecodeBody error", err)
-		return nil
+		return nil, err
 	}
-	return &t
+	return &t, nil
 }
 
-func GetReqMapData(w http.ResponseWriter, r *http.Request) map[string]interface{} {
-	model := GetReqData[map[string]interface{}](w, r)
+func GetReqMapData(w http.ResponseWriter, r *http.Request) (map[string]interface{}, error) {
+	model, err := GetReqData[map[string]interface{}](w, r)
 	if model == nil {
-		return nil
+		return nil, err
 	}
 	delete(*model, "ID")
 	delete(*model, "CreatedAt")
@@ -93,7 +95,7 @@ func GetReqMapData(w http.ResponseWriter, r *http.Request) map[string]interface{
 			delete(*model, key)
 		}
 	}
-	return *model
+	return *model, err
 }
 
 // Contains 判断src是否包含elem元素
@@ -148,3 +150,30 @@ func in(target string, str_array []string) bool {
 //func CreateNoAuthHandler(fun func(http.ResponseWriter, *http.Request)) http.Handler {
 //	return middle.EnableCors(middle.HandleOptions(http.HandlerFunc(fun)))
 //}
+
+func GetHostIp() string {
+	addrList, err := net.InterfaceAddrs()
+	if err != nil {
+		fmt.Println("get current host ip err: ", err)
+		return ""
+	}
+	//var ips []net.IP
+	for _, address := range addrList {
+		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && ipNet.IP.IsPrivate() {
+			if ipNet.IP.To4() != nil {
+				//ip = ipNet.IP.String()
+				//break
+				ip := ipNet.IP.To4()
+				//fmt.Println(ip[0])
+				switch ip[0] {
+				case 10:
+					return ipNet.IP.String()
+				case 192:
+					return ipNet.IP.String()
+				}
+			}
+		}
+	}
+	//fmt.Println(ips)
+	return ""
+}
