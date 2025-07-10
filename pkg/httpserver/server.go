@@ -8,6 +8,7 @@ import (
 	"github.com/xxl6097/go-http/internal/middle"
 	"github.com/xxl6097/go-http/pkg/ihttpserver"
 	"net/http"
+	"time"
 )
 
 var RouterUtil = middle.RouterUtil
@@ -31,6 +32,11 @@ func (this *httpserver) AddRoute(routes ...ihttpserver.IRoute) *httpserver {
 	for _, route := range routes {
 		this.routes = append(this.routes, route)
 	}
+	return this
+}
+
+func (this *httpserver) Auth(username, password string) *httpserver {
+	this.server.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
 	return this
 }
 func (this *httpserver) RouterFunc(fn func(router *mux.Router)) *httpserver {
