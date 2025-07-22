@@ -52,6 +52,11 @@ func (this *httpserver) register(router *mux.Router) {
 	}
 }
 
+func (this *httpserver) Handle(pattern string, handler http.Handler) *httpserver {
+	//return r.NewRoute().Path(path).Handler(handler)
+	return this
+}
+
 func (this *httpserver) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) *httpserver {
 	this.server.HandleFunc(pattern, handler)
 	return this

@@ -39,6 +39,13 @@ func (this *Server) CORSMethodMiddleware() *Server {
 	this.router.Use(mux.CORSMethodMiddleware(this.router))
 	return this
 }
+
+func (this *Server) Handle(pattern string, handler http.Handler) *Server {
+	//return r.NewRoute().Path(path).Handler(handler)
+	this.router.Handle(pattern, handler)
+	return this
+}
+
 func (this *Server) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) *Server {
 	this.router.HandleFunc(pattern, handler)
 	return this
