@@ -78,11 +78,13 @@ func (this *Server) Start(address string) {
 		Handler: this.router,
 	}
 	this.server = s
-	defer this.shutdownWG.Done()
-	log.Printf("Server starting on %s", s.Addr)
-	if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalf("Server failed: %v", err)
-	}
+	glog.Debug(fmt.Sprintf("http://%s%s", util.GetHostIp(), address))
+	go func() {
+		defer this.shutdownWG.Done()
+		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("Server failed: %v", err)
+		}
+	}()
 }
 
 func (this *Server) StartTSL(address string, cert tls.Certificate) {
@@ -93,16 +95,18 @@ func (this *Server) StartTSL(address string, cert tls.Certificate) {
 		TLSConfig: &tls.Config{Certificates: []tls.Certificate{cert}},
 	}
 	this.server = server
-	defer this.shutdownWG.Done()
 	ln, err := tls.Listen("tcp", address, server.TLSConfig)
 	if err != nil {
 		glog.Fatal("server listen err:", err)
 		return
 	}
 	glog.Debug(fmt.Sprintf("https://%s%s", util.GetHostIp(), address))
-	if e := server.Serve(ln); e != nil && !errors.Is(e, http.ErrServerClosed) {
-		log.Fatalf("Server failed: %v", e)
-	}
+	go func() {
+		defer this.shutdownWG.Done()
+		if e := server.Serve(ln); e != nil && !errors.Is(e, http.ErrServerClosed) {
+			log.Fatalf("Server failed: %v", e)
+		}
+	}()
 }
 
 // Stop 安全关闭服务（含超时控制）
@@ -128,12 +132,12 @@ func (this *Server) setup() {
 
 func (this *Server) Done(port int) *Server {
 	this.setup()
-	go this.Start(fmt.Sprintf(":%d", port))
+	this.Start(fmt.Sprintf(":%d", port))
 	return this
 }
 
 func (this *Server) DoneTSL(port int, cert tls.Certificate) {
 	this.setup()
-	go this.StartTSL(fmt.Sprintf(":%d", port), cert)
+	this.StartTSL(fmt.Sprintf(":%d", port), cert)
 	defer this.Stop()
 }
