@@ -2,7 +2,6 @@ package test
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/xxl6097/go-http/pkg/httpserver"
 	"github.com/xxl6097/go-http/pkg/ihttpserver"
 	"net/http"
 )
@@ -26,34 +25,9 @@ func NewRoute(ctl *TestController) ihttpserver.IRoute {
 //}
 
 func (this *CardRoute) Setup(router *mux.Router) {
-	httpserver.RouterUtil.AddHandleFunc(router, ihttpserver.ApiModel{
-		Method: http.MethodPost,
-		Path:   "/mqtt/auth",
-		Fun:    this.controller.Auth,
-		NoAuth: true,
-	})
-	httpserver.RouterUtil.AddHandleFunc(router, ihttpserver.ApiModel{
-		Method: http.MethodPost,
-		Path:   "/mqtt/post",
-		Fun:    this.controller.Post,
-		NoAuth: true,
-	})
-	httpserver.RouterUtil.AddHandleFunc(router, ihttpserver.ApiModel{
-		Method: http.MethodGet,
-		Path:   "/mqtt/test",
-		Fun:    this.controller.Test,
-		NoAuth: false,
-	})
-	httpserver.RouterUtil.AddHandleFunc(router, ihttpserver.ApiModel{
-		Method: http.MethodGet,
-		Path:   "/prod-api/vue-admin-template/user/info",
-		Fun:    this.controller.Test,
-		NoAuth: false,
-	})
-	httpserver.RouterUtil.AddHandleFunc(router, ihttpserver.ApiModel{
-		Method: http.MethodPost,
-		Path:   "/frp",
-		Fun:    this.controller.Frp,
-		NoAuth: false,
-	})
+	router.HandleFunc("/mqtt/auth", this.controller.Auth).Methods(http.MethodPost)
+	router.HandleFunc("/mqtt/post", this.controller.Post).Methods(http.MethodPost)
+	router.HandleFunc("/mqtt/test", this.controller.Test).Methods(http.MethodGet)
+	router.HandleFunc("/prod-api/vue-admin-template/user/info", this.controller.Test).Methods(http.MethodGet)
+	router.HandleFunc("/frp", this.controller.Frp).Methods(http.MethodPost)
 }

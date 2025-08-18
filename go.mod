@@ -8,3 +8,5 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/xxl6097/glog v0.1.47
 )
+
+//require go.uber.org/goleak v1.3.0 // indirect
