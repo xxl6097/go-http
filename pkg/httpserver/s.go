@@ -115,6 +115,11 @@ func (s *Server) Stop() {
 	s.shutdownWG.Wait()
 	log.Println("Server stopped")
 }
+
+func (s *Server) Wait() {
+	s.shutdownWG.Wait()
+	log.Println("Server Wait")
+}
 func (this *Server) setup() {
 	for _, route := range this.routes {
 		route.Setup(this.router)
