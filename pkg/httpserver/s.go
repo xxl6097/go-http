@@ -55,6 +55,9 @@ func (this *Server) Handle(pattern string, handler http.Handler) *Server {
 	return this
 }
 func BasicAuth(router *mux.Router, username, password string) {
+	if username == "" || password == "" || router == nil {
+		return
+	}
 	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
 }
 func (this *Server) BasicAuth(username, password string) *Server {
