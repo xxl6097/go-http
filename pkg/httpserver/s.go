@@ -42,12 +42,24 @@ func (this *Server) AddRoute(routes ...ihttpserver.IRoute) *Server {
 	}
 	return this
 }
+
+func (this *Server) AddApi(api func(router *mux.Router)) *Server {
+	if api == nil {
+		return this
+	}
+	api(this.router)
+	return this
+}
 func (this *Server) Handle(pattern string, handler http.Handler) *Server {
 	this.router.Handle(pattern, handler)
 	return this
 }
 func (this *Server) BasicAuth(username, password string) *Server {
 	this.router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
+	return this
+}
+func (this *Server) BasicAuthRouter(router *mux.Router, username, password string) *Server {
+	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
 	return this
 }
 func (this *Server) RouterFunc(fn func(router *mux.Router)) *Server {
