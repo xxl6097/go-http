@@ -5,7 +5,6 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
-	"github.com/xxl6097/glog/glog"
 	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
@@ -49,20 +48,18 @@ func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTP
 	return authMid
 }
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
-	glog.Debug("Check Basic RequestURI", r.RequestURI)
-	glog.Debug("Check Basic RemoteAddr", r.RemoteAddr)
-	glog.Debug("Check Basic Referer", r.Referer())
-	query, err := url.Parse(r.Referer())
-	glog.Debug("Check Basic Referer", query, err)
-	glog.Debug("Check Basic Query", query.Query())
-	glog.Debug("Check Basic RawQuery", query.RawQuery)
 	autoCode := r.URL.Query().Get("auth_code")
+	if !r.URL.Query().Has("auth_code") {
+		query, err := url.Parse(r.Referer())
+		if err == nil && query != nil {
+			autoCode = query.Query().Get("auth_code")
+		}
+	}
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
 		return true
 	} else if authMid.authFunc != nil {
 		ok := authMid.authFunc(r)
-		glog.Debug("checkBasic", ok)
 		if ok {
 			next.ServeHTTP(w, r)
 			return true
