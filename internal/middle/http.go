@@ -54,6 +54,8 @@ func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.Response
 	glog.Debug("Check Basic Referer", r.Referer())
 	query, err := url.Parse(r.Referer())
 	glog.Debug("Check Basic Referer", query, err)
+	glog.Debug("Check Basic Query", query.Query())
+	glog.Debug("Check Basic RawQuery", query.RawQuery)
 	autoCode := r.URL.Query().Get("auth_code")
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
