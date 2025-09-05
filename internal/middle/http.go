@@ -50,15 +50,13 @@ func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTP
 }
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
 	autoCode := r.URL.Query().Get("auth_code")
-	//if !r.URL.Query().Has("auth_code") {
-	//	query, err := url.Parse(r.Referer())
-	//	if err == nil && query != nil {
-	//		autoCode = query.Query().Get("auth_code")
-	//	}
-	//}
-	query, err := url.Parse(r.Referer())
-	if err == nil && query != nil {
-		autoCode = query.Query().Get("auth_code")
+	if autoCode == "" {
+		query, err := url.Parse(r.Referer())
+		if err == nil && query != nil {
+			if query.Query().Has("auth_code") {
+				autoCode = query.Query().Get("auth_code")
+			}
+		}
 	}
 	glog.Infof("Auth: %s", autoCode)
 	glog.Infof("RequestURI: %s", r.RequestURI)
