@@ -9,6 +9,7 @@ import (
 	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -51,7 +52,8 @@ func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.Response
 	glog.Debug("Check Basic RequestURI", r.RequestURI)
 	glog.Debug("Check Basic RemoteAddr", r.RemoteAddr)
 	glog.Debug("Check Basic Referer", r.Referer())
-	glog.Debug("Check Basic UserAgent", r.UserAgent())
+	query, err := url.Parse(r.Referer())
+	glog.Debug("Check Basic Referer", query, err)
 	autoCode := r.URL.Query().Get("auth_code")
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
