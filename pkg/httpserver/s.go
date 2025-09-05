@@ -54,18 +54,18 @@ func (this *Server) Handle(pattern string, handler http.Handler) *Server {
 	this.router.Handle(pattern, handler)
 	return this
 }
-func BasicAuth(router *mux.Router, username, password string) {
+func BasicAuth(router *mux.Router, username, password string, codes ...string) {
 	if username == "" || password == "" || router == nil {
 		return
 	}
-	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
+	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).AddAuthCode(codes...).Middleware)
 }
 func (this *Server) BasicAuth(username, password string) *Server {
 	BasicAuth(this.router, username, password)
 	return this
 }
-func (this *Server) BasicAuthRouter(router *mux.Router, username, password string) *Server {
-	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).Middleware)
+func (this *Server) BasicAuthRouter(router *mux.Router, username, password string, codes ...string) *Server {
+	router.Use(middle.NewHTTPAuthMiddleware(username, password).SetAuthFailDelay(200 * time.Millisecond).AddAuthCode(codes...).Middleware)
 	return this
 }
 func (this *Server) RouterFunc(fn func(router *mux.Router)) *Server {

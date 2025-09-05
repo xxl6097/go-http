@@ -3,6 +3,8 @@ package middle
 import (
 	"compress/gzip"
 	"crypto/subtle"
+	"encoding/base64"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -12,34 +14,66 @@ import (
 type HTTPAuthMiddleware struct {
 	user          string
 	passwd        string
+	authcodes     []string
 	authFailDelay time.Duration
 }
 
 func NewHTTPAuthMiddleware(user, passwd string) *HTTPAuthMiddleware {
 	return &HTTPAuthMiddleware{
-		user:   user,
-		passwd: passwd,
+		user:      user,
+		passwd:    passwd,
+		authcodes: make([]string, 0),
 	}
+}
+
+func (authMid *HTTPAuthMiddleware) AddAuthCode(codes ...string) *HTTPAuthMiddleware {
+	if codes != nil {
+		for _, code := range codes {
+			authMid.authcodes = append(authMid.authcodes, code)
+		}
+	}
+	return authMid
 }
 
 func (authMid *HTTPAuthMiddleware) SetAuthFailDelay(delay time.Duration) *HTTPAuthMiddleware {
 	authMid.authFailDelay = delay
 	return authMid
 }
+func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
+	autoCode := r.URL.Query().Get("auth_code")
+	if Contains[string](authMid.authcodes, autoCode) {
+		next.ServeHTTP(w, r)
+		return true
+	}
+	reqUser, reqPasswd, hasAuth := r.BasicAuth()
+	if authMid.user == "" && authMid.passwd == "" {
+		next.ServeHTTP(w, r)
+		return true
+	} else if hasAuth {
+		if autoCode != "" {
+			auth := reqUser + ":" + reqPasswd
+			code := base64.StdEncoding.EncodeToString([]byte(auth))
+			if ConstantTimeEqString(code, autoCode) {
+				next.ServeHTTP(w, r)
+				return true
+			}
+		} else if ConstantTimeEqString(reqUser, authMid.user) && ConstantTimeEqString(reqPasswd, authMid.passwd) {
+			next.ServeHTTP(w, r)
+			return true
+		}
+	}
+	return false
+}
 
 func (authMid *HTTPAuthMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		reqUser, reqPasswd, hasAuth := r.BasicAuth()
-		if (authMid.user == "" && authMid.passwd == "") ||
-			(hasAuth && ConstantTimeEqString(reqUser, authMid.user) &&
-				ConstantTimeEqString(reqPasswd, authMid.passwd)) {
-			next.ServeHTTP(w, r)
-		} else {
+		if !authMid.checkBasic(next, w, r) {
 			if authMid.authFailDelay > 0 {
 				time.Sleep(authMid.authFailDelay)
 			}
 			w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			//http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			http.Error(w, fmt.Sprintf("%s，未授权，请输入basic授权信息", http.StatusText(http.StatusUnauthorized)), http.StatusUnauthorized)
 		}
 	})
 }
@@ -77,4 +111,15 @@ func (w gzipResponseWriter) Write(b []byte) (int, error) {
 
 func ConstantTimeEqString(a, b string) bool {
 	return subtle.ConstantTimeCompare([]byte(a), []byte(b)) == 1
+}
+
+// Contains 检查元素是否存在于切片中。
+// T 必须是可比较的类型 (comparable)，例如 int, string, 或自定义结构体等。
+func Contains[T comparable](slice []T, element T) bool {
+	for _, item := range slice {
+		if item == element { // 因为 T 被约束为 comparable，所以可以使用 == 操作符
+			return true
+		}
+	}
+	return false
 }

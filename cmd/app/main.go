@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/xxl6097/glog/glog"
+	"github.com/xxl6097/go-http/cmd/app/api"
 	"github.com/xxl6097/go-http/cmd/app/test"
 	"github.com/xxl6097/go-http/internal/middle"
 	"github.com/xxl6097/go-http/pkg/httpserver"
@@ -42,9 +43,10 @@ func bootstrap() {
 	server := httpserver.New().
 		AddRoute(test.NewRoute(test.NewController())).
 		AddRoute(test.NewWsRoute()).
+		AddApi(api.NewHello()).
 		//Use(authMiddle).
 		//RouterFunc(initSse).
-		Done(8080)
+		Done(8081)
 	defer server.Stop()
 	server.Wait()
 }
