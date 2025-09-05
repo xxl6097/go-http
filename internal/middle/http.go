@@ -15,6 +15,7 @@ type HTTPAuthMiddleware struct {
 	user          string
 	passwd        string
 	authcodes     []string
+	authFunc      func(r *http.Request) bool
 	authFailDelay time.Duration
 }
 
@@ -39,9 +40,17 @@ func (authMid *HTTPAuthMiddleware) SetAuthFailDelay(delay time.Duration) *HTTPAu
 	authMid.authFailDelay = delay
 	return authMid
 }
+
+func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTPAuthMiddleware {
+	authMid.authFunc = fn
+	return authMid
+}
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
 	autoCode := r.URL.Query().Get("auth_code")
 	if Contains[string](authMid.authcodes, autoCode) {
+		next.ServeHTTP(w, r)
+		return true
+	} else if authMid.authFunc != nil && authMid.authFunc(r) {
 		next.ServeHTTP(w, r)
 		return true
 	}
