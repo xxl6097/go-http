@@ -5,6 +5,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"github.com/xxl6097/glog/glog"
 	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
@@ -55,6 +56,7 @@ func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.Response
 			autoCode = query.Query().Get("auth_code")
 		}
 	}
+	glog.Infof("Auth: %s,%s,%s", autoCode, r.RequestURI, r.Referer())
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
 		return true
