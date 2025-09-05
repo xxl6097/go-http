@@ -3,13 +3,9 @@ package middle
 import (
 	"compress/gzip"
 	"crypto/subtle"
-	"encoding/base64"
 	"fmt"
-	"github.com/xxl6097/glog/glog"
-	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 )
@@ -49,22 +45,19 @@ func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTP
 	return authMid
 }
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
-	autoCode := r.URL.Query().Get("auth_code")
-	if autoCode == "" {
-		query, err := url.Parse(r.Referer())
-		if err == nil && query != nil {
-			if query.Query().Has("auth_code") {
-				autoCode = query.Query().Get("auth_code")
-			}
-		}
-	}
-	glog.Infof("Auth: %s", autoCode)
-	glog.Infof("RequestURI: %s", r.RequestURI)
-	glog.Infof("Referer: %s", r.Referer())
-	if util.Contains1[string](authMid.authcodes, autoCode) {
-		next.ServeHTTP(w, r)
-		return true
-	} else if authMid.authFunc != nil {
+	//autoCode := r.URL.Query().Get("auth_code")
+	//if autoCode == "" {
+	//	query, err := url.Parse(r.Referer())
+	//	if err == nil && query != nil {
+	//		if query.Query().Has("auth_code") {
+	//			autoCode = query.Query().Get("auth_code")
+	//		}
+	//	}
+	//}
+	//glog.Infof("Auth: %s", autoCode)
+	//glog.Infof("RequestURI: %s", r.RequestURI)
+	//glog.Infof("Referer: %s", r.Referer())
+	if authMid.authFunc != nil {
 		ok := authMid.authFunc(r)
 		if ok {
 			next.ServeHTTP(w, r)
@@ -76,14 +69,15 @@ func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.Response
 		next.ServeHTTP(w, r)
 		return true
 	} else if hasAuth {
-		if autoCode != "" {
-			auth := reqUser + ":" + reqPasswd
-			code := base64.StdEncoding.EncodeToString([]byte(auth))
-			if ConstantTimeEqString(code, autoCode) {
-				next.ServeHTTP(w, r)
-				return true
-			}
-		} else if ConstantTimeEqString(reqUser, authMid.user) && ConstantTimeEqString(reqPasswd, authMid.passwd) {
+		//if autoCode != "" {
+		//	auth := reqUser + ":" + reqPasswd
+		//	code := base64.StdEncoding.EncodeToString([]byte(auth))
+		//	if ConstantTimeEqString(code, autoCode) {
+		//		next.ServeHTTP(w, r)
+		//		return true
+		//	}
+		//} else
+		if ConstantTimeEqString(reqUser, authMid.user) && ConstantTimeEqString(reqPasswd, authMid.passwd) {
 			next.ServeHTTP(w, r)
 			return true
 		}
