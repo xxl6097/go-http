@@ -5,6 +5,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"github.com/xxl6097/glog/glog"
 	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
@@ -51,9 +52,13 @@ func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.Response
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
 		return true
-	} else if authMid.authFunc != nil && authMid.authFunc(r) {
-		next.ServeHTTP(w, r)
-		return true
+	} else if authMid.authFunc != nil {
+		ok := authMid.authFunc(r)
+		glog.Debug("checkBasic", ok)
+		if ok {
+			next.ServeHTTP(w, r)
+			return true
+		}
 	}
 	reqUser, reqPasswd, hasAuth := r.BasicAuth()
 	if authMid.user == "" && authMid.passwd == "" {
