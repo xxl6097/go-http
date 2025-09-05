@@ -50,6 +50,8 @@ func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTP
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
 	glog.Debug("Check Basic RequestURI", r.RequestURI)
 	glog.Debug("Check Basic RemoteAddr", r.RemoteAddr)
+	glog.Debug("Check Basic Referer", r.Referer())
+	glog.Debug("Check Basic UserAgent", r.UserAgent())
 	autoCode := r.URL.Query().Get("auth_code")
 	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
