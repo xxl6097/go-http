@@ -5,6 +5,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"github.com/xxl6097/go-http/pkg/util"
 	"io"
 	"net/http"
 	"strings"
@@ -47,7 +48,7 @@ func (authMid *HTTPAuthMiddleware) AuthFunc(fn func(r *http.Request) bool) *HTTP
 }
 func (authMid *HTTPAuthMiddleware) checkBasic(next http.Handler, w http.ResponseWriter, r *http.Request) bool {
 	autoCode := r.URL.Query().Get("auth_code")
-	if Contains[string](authMid.authcodes, autoCode) {
+	if util.Contains1[string](authMid.authcodes, autoCode) {
 		next.ServeHTTP(w, r)
 		return true
 	} else if authMid.authFunc != nil && authMid.authFunc(r) {
@@ -120,15 +121,4 @@ func (w gzipResponseWriter) Write(b []byte) (int, error) {
 
 func ConstantTimeEqString(a, b string) bool {
 	return subtle.ConstantTimeCompare([]byte(a), []byte(b)) == 1
-}
-
-// Contains 检查元素是否存在于切片中。
-// T 必须是可比较的类型 (comparable)，例如 int, string, 或自定义结构体等。
-func Contains[T comparable](slice []T, element T) bool {
-	for _, item := range slice {
-		if item == element { // 因为 T 被约束为 comparable，所以可以使用 == 操作符
-			return true
-		}
-	}
-	return false
 }

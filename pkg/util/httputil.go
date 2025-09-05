@@ -113,3 +113,14 @@ type gzipResponseWriter struct {
 func (w gzipResponseWriter) Write(b []byte) (int, error) {
 	return w.Writer.Write(b)
 }
+
+// Contains1 检查元素是否存在于切片中。
+// T 必须是可比较的类型 (comparable)，例如 int, string, 或自定义结构体等。
+func Contains1[T comparable](slice []T, element T) bool {
+	for _, item := range slice {
+		if item == element { // 因为 T 被约束为 comparable，所以可以使用 == 操作符
+			return true
+		}
+	}
+	return false
+}
