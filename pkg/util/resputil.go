@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/xxl6097/glog/glog"
 	"net"
 	"net/http"
 	"reflect"
@@ -63,7 +62,7 @@ func Respond(w http.ResponseWriter, data map[string]interface{}) {
 
 func GetRequestParam(r *http.Request, key string) string {
 	vals := r.URL.Query()[key]
-	glog.Info("GetRequestParam, vals: ", vals)
+	fmt.Println("GetRequestParam, vals: ", vals)
 	if vals == nil || len(vals) == 0 {
 		return ""
 	}
@@ -75,7 +74,7 @@ func GetReqData[T any](w http.ResponseWriter, r *http.Request) (*T, error) {
 	err := json.NewDecoder(r.Body).Decode(&t)
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusBadRequest)
-		glog.Error("DecodeBody error", err)
+		fmt.Println("DecodeBody error", err)
 		return nil, err
 	}
 	return &t, nil

@@ -1,8 +1,10 @@
 package middle
 
 import (
-	"github.com/xxl6097/glog/glog"
+	"github.com/xxl6097/glog/pkg/z"
 	"github.com/xxl6097/go-http/pkg/util"
+	"go.uber.org/zap"
+
 	"net/http"
 	"strings"
 )
@@ -39,7 +41,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				}
 				next.ServeHTTP(w, r)
 			} else {
-				glog.Info(auths, http.StatusUnauthorized)
+				z.L().Info(auths, zap.Int("code", http.StatusUnauthorized))
 				//w.WriteHeader(http.StatusUnauthorized)
 				util.Respond(w, util.TokenInvalid)
 			}

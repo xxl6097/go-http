@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/xxl6097/glog/glog"
+	"github.com/xxl6097/glog/pkg/z"
 	"github.com/xxl6097/go-http/cmd/app/api"
 	"github.com/xxl6097/go-http/cmd/app/test"
 	"github.com/xxl6097/go-http/internal/middle"
 	"github.com/xxl6097/go-http/pkg/httpserver"
+	"go.uber.org/zap"
 )
 
 //func init() {
@@ -35,7 +36,7 @@ import (
 
 func bootstrap() {
 	middle.TokenUtils.Callback(func(s string) (bool, map[string]interface{}) {
-		glog.Println("Callback", s)
+		z.L().Debug("Callback", zap.String("token", s))
 		return true, nil
 	})
 

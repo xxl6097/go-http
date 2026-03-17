@@ -2,8 +2,10 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/xxl6097/glog/glog"
+	"github.com/xxl6097/glog/pkg/z"
 	"github.com/xxl6097/go-http/pkg/httpserver"
+	"go.uber.org/zap"
+
 	"net/http"
 )
 
@@ -16,6 +18,6 @@ func NewHello() func(*mux.Router) {
 	}
 }
 func apiHello(w http.ResponseWriter, r *http.Request) {
-	glog.Printf("%s %s %s\n", r.Method, r.URL.String(), r.Proto)
+	z.L().Info("apiHello", zap.String("Method", r.Method), zap.String("URL", r.URL.String()), zap.String("Proto", r.Proto))
 	w.Write([]byte("hello world"))
 }

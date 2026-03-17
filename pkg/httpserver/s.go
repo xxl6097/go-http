@@ -5,15 +5,16 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/xxl6097/glog/glog"
-	"github.com/xxl6097/go-http/internal/middle"
-	"github.com/xxl6097/go-http/pkg/ihttpserver"
-	"github.com/xxl6097/go-http/pkg/util"
+
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/xxl6097/go-http/internal/middle"
+	"github.com/xxl6097/go-http/pkg/ihttpserver"
+	"github.com/xxl6097/go-http/pkg/util"
 )
 
 type Server struct {
@@ -106,7 +107,7 @@ func (this *Server) Start(address string) {
 		Handler: this.router,
 	}
 	this.server = s
-	glog.Debug(fmt.Sprintf("http://%s%s", util.GetHostIp(), address))
+	fmt.Printf("http://%s%s\n", util.GetHostIp(), address)
 	go func() {
 		defer this.shutdownWG.Done()
 		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -125,10 +126,10 @@ func (this *Server) StartTSL(address string, cert tls.Certificate) {
 	this.server = server
 	ln, err := tls.Listen("tcp", address, server.TLSConfig)
 	if err != nil {
-		glog.Fatal("server listen err:", err)
+		fmt.Println("server listen err", err)
 		return
 	}
-	glog.Debug(fmt.Sprintf("https://%s%s", util.GetHostIp(), address))
+	fmt.Printf("http://%s%s\n", util.GetHostIp(), address)
 	go func() {
 		defer this.shutdownWG.Done()
 		if e := server.Serve(ln); e != nil && !errors.Is(e, http.ErrServerClosed) {
